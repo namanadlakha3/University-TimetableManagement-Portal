@@ -9,7 +9,7 @@ include('security2.php');
                 }
                 $query="select * from faculty where username='$username'";
                 $query_run = mysqli_query($connection,$query);
-    
+  
                 while($row = mysqli_fetch_assoc($query_run))
                 {
 					$token=$row['Token'];
@@ -19,13 +19,15 @@ include('security2.php');
                     $designation=$row["Designation"];
                     $img=$row["Img"];
                     $imageURL = 'admin/uploads/'.$img; 
+					
                 }
-                $connection= mysqli_connect('localhost','root','');
+             /*   $connection= mysqli_connect('localhost','root','');
                 $db=mysqli_select_db($connection,'faculty');
                 $tid=$_SESSION['username'];
                
                 $del="delete from timetable where flag=0 and tid='$tid'";
-                $d = mysqli_query($connection,$del);
+                $d = mysqli_query($connection,$del);*/
+			
 ?>
 <!DOCTYPE html>
 <html>

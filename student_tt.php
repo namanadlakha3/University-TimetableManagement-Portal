@@ -1,6 +1,7 @@
 <?php 
 include('security3.php');
                 $sap=$_SESSION['sap'];
+				echo $_SESSION['tt']="";
                 $connection= mysqli_connect('localhost','root','');
                 $db=mysqli_select_db($connection,'minor');
                 if(!$connection)
@@ -23,12 +24,10 @@ include('security3.php');
                     $img=$row["Image"];
                     $imageURL = 'admin/uploads/'.$img;
                 }
-                $connection= mysqli_connect('localhost','root','');
-                $db=mysqli_select_db($connection,'students');
-                $tid=$_SESSION['sap'];
+           
+         //       $tid=$_SESSION['sap'];
                
-                $del="delete from timetable where flag=0 and tid='$tid'";
-                $d = mysqli_query($connection,$del);
+                
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,12 +43,94 @@ include('security3.php');
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- Our Custom CSS -->
     <link rel="stylesheet" href="css/faculty_style.css">
-    <link rel="stylesheet" href="css/tt_style.css">
+    <link rel="stylesheet" href="css/timetable_style.css">
 
 
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script>
+    function showTime(str,str2){
+        if (str=="") {
+            document.getElementById("getTime").innerHTML="";
+            return;
+        }
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function() 
+        {
+            if (this.readyState==4 && this.status==200) {
+                document.getElementById("getTime").innerHTML=this.responseText;
+            }
+        }
+        xmlhttp.open("GET","getInfo.php?q="+str+"&q2="+str2,true);
+        xmlhttp.send();
+
+    }
+    function showTime2(str,str2){
+        if (str=="") {
+            document.getElementById("getTime2").innerHTML="";
+            return;
+        }
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function() 
+        {
+            if (this.readyState==4 && this.status==200) {
+                document.getElementById("getTime2").innerHTML=this.responseText;
+            }
+        }
+        xmlhttp.open("GET","getInfo.php?q="+str+"&q2="+str2,true);
+        xmlhttp.send();
+
+    }
+    function showTime3(str,str2){
+        if (str=="") {
+            document.getElementById("getTime3").innerHTML="";
+            return;
+        }
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function() 
+        {
+            if (this.readyState==4 && this.status==200) {
+                document.getElementById("getTime3").innerHTML=this.responseText;
+            }
+        }
+        xmlhttp.open("GET","getInfo.php?q="+str+"&q2="+str2,true);
+        xmlhttp.send();
+
+    }
+    function showTime4(str,str2){
+        if (str=="") {
+            document.getElementById("getTime4").innerHTML="";
+            return;
+        }
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function() 
+        {
+            if (this.readyState==4 && this.status==200) {
+                document.getElementById("getTime4").innerHTML=this.responseText;
+            }
+        }
+        xmlhttp.open("GET","getInfo.php?q="+str+"&q2="+str2,true);
+        xmlhttp.send();
+
+    }
+    function showTime5(str,str2){
+        if (str=="") {
+            document.getElementById("getTime5").innerHTML="";
+            return;
+        }
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function() 
+        {
+            if (this.readyState==4 && this.status==200) {
+                document.getElementById("getTime5").innerHTML=this.responseText;
+            }
+        }
+        xmlhttp.open("GET","getInfo.php?q="+str+"&q2="+str2,true);
+        xmlhttp.send();
+
+    }
+    </script>
 </head>
 
 <body style="overflow-x:hidden;">
@@ -114,13 +195,29 @@ include('security3.php');
         <!--Sidebar end-->
         
         <!--Main Content start-->
+        
         <div class="col md-6 lg-6">
             <div class="row" style="margin-left:20px;margin-top:40px;">
-                <button type="button" class="btn btn-md subjects" data-toggle="modal" data-target="#select_room1">Subject 1</button>
-                <button type="button" class="btn btn-md subjects" data-toggle="modal" data-target="#select_room2">Subject 2</button>
-                <button type="button" class="btn btn-md subjects" data-toggle="modal" data-target="#select_room3">Subject 3</button>
-                <button type="button" class="btn btn-md subjects" data-toggle="modal" data-target="#select_room4">Subject 4</button>
-                <button type="button" class="btn btn-md subjects" data-toggle="modal" data-target="#select_room5">Subject 5</button>
+            <?php
+            $connection= mysqli_connect('localhost','root','');
+            $db=mysqli_select_db($connection,'minor');
+            if(!$connection)
+            {
+                echo "Connection error";
+            }
+            $query="select subject from subject where year=$year";
+            $query_run = mysqli_query($connection,$query);
+            $arr=[];
+            $i=0;
+            while($row = mysqli_fetch_assoc($query_run))
+            {
+                $arr[$i]=$row['subject'];
+                echo " <button type='button' class='btn btn-md subjects' data-toggle='modal' data-target='#{$arr[$i]}'>{$arr[$i]} </button>";
+                $i++;
+            }
+            
+        ?>
+                        
             </div>
                 <div class="container-table100" >
                     <div class="wrap-table100">
@@ -143,185 +240,241 @@ include('security3.php');
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1"><a href="#" style="display:block;position:relative;width:100%;">9:30 - 10:30</a></td>
                                         <td class="column100 column2" data-column="column2">
-                                      
-        <?php 
-        			   $conn= new mysqli('localhost','root','','faculty');
-                       if ($conn->connect_error) {
-die("Connection failed: " . $conn->connect_error);
+  <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="9:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
 }
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="9:30" and day="monday" ';
-$result = $conn->query($sql);
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
 
 ?>
-
                                         </td>
                                         <td class="column100 column3" data-column="column3" style="width: 20px;">
-                                       <?php     
-									   
+              <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="9:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="9:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
-?>                                        </td>
+
+?>
+                                          </td>
 										
                                         <td class="column100 column4" data-column="column4">
-                                                     <?php     
-													 
+     <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="9:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="9:30" and day="wednesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column5" data-column="column5">
-                                                     <?php     
-													 
+                                            <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="9:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="9:30" and day="thursday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>          
                                         </td>
                                         <td class="column100 column6" data-column="column6">
-                                                     <?php     
-													
+                                                    <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="9:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="9:30" and day="friday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>  
                                         </td>
                                         
                                     </tr>
         
                                     <tr class="row100">
-                                        <td class="column100 column1" data-column="column1">10:30 - 11:30
-                             <?php     
-							 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="monday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
-    echo " ";
-}
- ?>
+                            
                                         </td>
                                         <td class="column100 column2" data-column="column2">
-                                            <?php     
-											
-											
+                                             <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="10:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column3" data-column="column3">
-                                            <?php    
+                                                                   <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="10:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="wednesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column4" data-column="column4">
-                                       <?php     
-								
+                                                              <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="10:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="thursday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column5" data-column="column5">
-										  <?php     
-							
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="friday" ';
-$result = $conn->query($sql);
+										                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="10:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column6" data-column="column6">
-                                        
+                                                                <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="10:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
+
+    // output data of each row
+  
+ else 
+{
+    echo " ";
+}
+
+?>
                                         </td>
                                         
                                     </tr>
@@ -329,88 +482,120 @@ if ($result->num_rows > 0) {
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1">11:30 - 12:30</td>
                                         <td class="column100 column2" data-column="column2">
-											  <?php     
-									  
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="11:30" and day="monday" ';
-$result = $conn->query($sql);
+											                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="11:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         
                                         </td>
                                         <td class="column100 column3" data-column="column3">
-                                        <?php     
-									   
+                                        							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="11:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="11:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column4" data-column="column4">
-                                         <?php     
-							
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="11:30" and day="wednesday" ';
-$result = $conn->query($sql);
+                                                               							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="11:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column5" data-column="column5">
-                                        <?php     
-									  
+                                                              							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="11:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="11:30" and day="thursday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column6" data-column="column6"> 
- <?php     
-									  
+ 					                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="11:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="11:30" and day="friday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>										
+
+?>
                                           </td>
                                         
                                     </tr>
@@ -418,86 +603,119 @@ if ($result->num_rows > 0) {
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1">12:30 - 1:30</td>
                                         <td class="column100 column2" data-column="column2">
-										 <?php     
-								
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="12:30" and day="monday" ';
-$result = $conn->query($sql);
+										                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="12:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?></td>
+
+?>
+										</td>
                                         <td class="column100 column3" data-column="column3">
-                                        	 <?php     
-									
+																			                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="12:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="12:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
+
+?>
+                                        	                               </td>
+                                        <td class="column100 column4" data-column="column4">
+                                        										                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="12:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
+
+    // output data of each row
+  
+ else 
+{
+    echo " ";
+}
+
 ?>
                                         </td>
-                                        <td class="column100 column4" data-column="column4">
-                                        	 <?php     
-			
-
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="12:30" and day="wednesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
-    echo " ";
-}
- ?>
-                                        </td>
                                         <td class="column100 column5" data-column="column5">
-                                        	 <?php     
-		
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="12:30" and day="thursday" ';
-$result = $conn->query($sql);
+                                        										                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="12:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
+
 ?>
                                         </td>
                                         <td class="column100 column6" data-column="column6">
-                                        	 <?php     
-				
+                                        										                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="12:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="12:30" and day="friday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         
                                     </tr>
@@ -505,347 +723,476 @@ if ($result->num_rows > 0) {
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1">1:30 - 2:30</td>
                                         <td class="column100 column2" data-column="column2">
-                                          	 <?php     
-			
+                                          										                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="1:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="1:30" and day="monday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column3" data-column="column3">
-                                          	 <?php     
-									  
+                                                                 							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="1:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="1:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>	
                                         </td>
                                         <td class="column100 column4" data-column="column4">
-                                          	 <?php     
-					
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="1:30" and day="wednesday" ';
-$result = $conn->query($sql);
+                                          	                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="1:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         <td class="column100 column5" data-column="column5">
-                                         	 <?php     
-					
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="1:30" and day="thursday" ';
-$result = $conn->query($sql);
+                                         	                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="1:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
+
 ?>
                                         </td>
                                         <td class="column100 column6" data-column="column6">
-                                         	 <?php     
-			
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="1:30" and day="friday" ';
-$result = $conn->query($sql);
+                                         	                       							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="1:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?>
                                         </td>
                                         
                                     </tr>
         
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1">2:30 - 3:30</td>
-                                        <td class="column100 column2" data-column="column2">  	 <?php     
-				
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="2:30" and day="monday" ';
-$result = $conn->query($sql);
+                                        <td class="column100 column2" data-column="column2">                        							                          <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="2:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?></td>
+
+?> 	 </td>
                                         <td class="column100 column3" data-column="column3">
-                                       <?php     
-						
+                                       <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="2:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="2:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?> 
                                         </td>
                                         <td class="column100 column4" data-column="column4">
-                                        <?php     
-			
+                                       <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="2:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="2:30" and day="wednesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
-?>
+
+?> 
                                         </td>
                                         <td class="column100 column5" data-column="column5">
-                                                  <?php     
-				
+                                                   <?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="2:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="2:30" and day="thursday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
-?>                              </td>
+
+?>                            </td>
                                         <td class="column100 column6" data-column="column6">
-                                        <?php     
-					
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="2:30" and day="friday" ';
-$result = $conn->query($sql);
+										<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="2:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
-                                        </td>
+
+?> 
+                                                             </td>
                                         
                                     </tr>
         
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1">3:30 - 4:30</td>
                                         <td class="column100 column2" data-column="column2">
-										<?php     
-		
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="3:30" and day="monday" ';
-$result = $conn->query($sql);
+										<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="3:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?></td>
+
+?> 
+										</td>
                                         <td class="column100 column3" data-column="column3">
-                                       <?php     
-			
+                                      										<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="3:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="3:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?> 
                                         </td>
                                         <td class="column100 column4" data-column="column4">
-                                         <?php     
-									   
+                                        										<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="3:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="3:30" and day="wednesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?> 
                                         </td>
                                         <td class="column100 column5" data-column="column5">
-                                          <?php     
-									  
+                                         										<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="3:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="3:30" and day="thursday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?> 
                                         </td>
                                         <td class="column100 column6" data-column="column6">
-                                          <?php     
-				
+																				<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="3:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="3:30" and day="friday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
-?></td>
+
+?> 
+                                         </td>
                                         
                                     </tr>
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1">4:30 - 5:30</td>
                                         <td class="column100 column2" data-column="column2">
-										  <?php     
-									  
+																				<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="monday" and time="4:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="4:30" and day="monday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
-?>
+
+?> 
+										 
                                         </td>
                                         <td class="column100 column3" data-column="column3">
-                                        	  <?php     
-					
+																												<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="tuesday" and time="4:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="4:30" and day="tuesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
-?></td>
+
+?> 
+                                        	 </td>
                                         <td class="column100 column4" data-column="column4">
-                                       	  <?php     
-				
+                                       																			<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="wednesday" and time="4:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="4:30" and day="wednesday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?> 
                                         </td>
                                         <td class="column100 column5" data-column="column5">
-                                       	  <?php     
-									  
+                                       	 																		<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="thursday" and time="4:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="4:30" and day="thursday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
- ?>
+
+?> 
                                         </td>
                                         <td class="column100 column6" data-column="column6">
-                                        	  <?php     
-						
+                                        	  																		<?php 
+  
+$sql = 'Select room,subject,tid from student_timetable where sap="'.$sap.'" and day="friday" and time="4:30"';
+$result = mysqli_query($connection,$sql);
+if(mysqli_fetch_array($result))
+{
+while($row = mysqli_fetch_array($result))
+{
+	echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"]."<br>"."Faculty:".$row["tid"];
+}
+	
+}
 
-$sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="4:30" and day="friday" ';
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
     // output data of each row
-    while($row = $result->fetch_assoc()) {
-        echo "Room number: ". $row["room"]."<br>"."Subject:".$row["subject"];
-    }
-} else {
+  
+ else 
+{
     echo " ";
 }
-$conn->close();
- ?>
+
+?> 
                                         </td>
                                         
                                        
@@ -854,7 +1201,8 @@ $conn->close();
                                       
                                       
                                       <!-- #modal 2 -->
-                                    <div class="modal fade" id="select_room1">
+
+                                    <div class="modal fade" id="<?php echo $arr[0]; ?>">
                                       <div class="modal-dialog" style="max-width:30%;height:45%; overflow-y: auto; ">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -865,45 +1213,72 @@ $conn->close();
                                           <div class="modal-body">
                                           <div class="modal-body">
                                               
-                                                <form method="post" action="" >
+                                                <form method="post" action="stu_tt_code.php" >
                                             <div class="form-group">
 											Selected subject: <br>
-											<input type="text" value="monday" name="day" hidden>
-											SUBJECT 1
+											<input type="text" value="subject" name="<?php echo $arr[0]; ?>" hidden>
+											<input type="text" value="<?php echo $arr[0]; ?>" name="subject" hidden>
+											<?php echo $arr[0]; ?>
 											<br>
 											<br> 
                                             <label>  Select Faculty: </label>
-                                                <select name="fac">
-                                                <option value="fac1">Faculty1</option>
-                                                <option value="fac2">Faculty2</option>
-                                                <option value="fac3">Faculty3</option>
-                                                <option value="fac4">Faculty4</option>
+                                                <select name="fac" onchange="showTime(this.value,'<?php echo $arr[0] ?>')">
+                                                <option value="">Select faculty</option>
+                                            <?php     
+                                            $conn= mysqli_connect('localhost','root','');
+                                            $db=mysqli_select_db($conn,'minor');
+                                            if(!$conn)
+                                            {
+                                                 echo "Connection error";
+                                            }
+
+                                            $query = 'Select distinct tid from timetable where subject="'.$arr[0].'"';
+                                            $query_run = mysqli_query($conn,$query);
+                                            
+                                            while($row = mysqli_fetch_assoc($query_run))
+                                            {
+                                                    echo "<option value='{$row['tid']}'>{$row['tid']}</option>";
+                                                   
+                                            } 
+                                            ?>
+                                            
                                                </select>
                                             </div>
       
         
                                             <div class="form-group">
-                                                <label> Time: (time set by the faculty)</label>
+                                                <div id="getTime">-</div>
                                                 
                                             </div>
-                                            <div class="form-group">
-                                                <label>Room No: (Room no set by the faculty) </label>
-                                                
-                                            </div>
-                                        
-
+                                            
                                           <div class="modal-footer" style=" bottom: 0;">
-                                           
-                                            <input type="submit" name="submit" class="btn btn-primary" value="Save changes">
+                                           <?php
+												   $f1=1;
+										   $query="select * from student_timetable where sap='$sap' and subject='$arr[0]'";
+                                           $query_r = mysqli_query($connection,$query);
+										  if(mysqli_fetch_array($query_r))
+                                 {
+                                      $f1=0;
+	 
+                                     }
+                                           /*      while($row=mysqli_fetch_assoc($r))
+												 {
+													 $f1=1;
+												 }*/
+											if($f1==1)
+                                           echo ' <input type="submit" name="save" class="btn btn-primary" value="Save changes">
+											';
+											
+											?>
 											</form>
                                           </div>
                                         </div><!-- /.modal-content -->
                                       </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->  
                                       </div>
-</div>
+                                </div>
 									                                        <!--modal2-->
-                                    <div class="modal fade" id="select_room2">
+                                    <div class="modal fade" id="<?php echo $arr[1]; ?>">
                                     <div class="modal-dialog" style="max-width:30%;height:45%; overflow-y: auto; ">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -914,46 +1289,72 @@ $conn->close();
                                           <div class="modal-body">
                                           <div class="modal-body">
                                               
-                                                <form method="post" action="" >
+                                          <form method="post" action="stu_tt_code.php" >
                                             <div class="form-group">
 											Selected subject: <br>
 											<input type="text" value="monday" name="day" hidden>
-											SUBJECT 2
+											<?php echo $arr[1]; ?>
 											<br>
 											<br> 
                                             <label>  Select Faculty: </label>
-                                                <select name="fac">
-                                                <option value="fac1">Faculty1</option>
-                                                <option value="fac2">Faculty2</option>
-                                                <option value="fac3">Faculty3</option>
-                                                <option value="fac4">Faculty4</option>
+                                                <select name="fac" onchange="showTime2(this.value,'<?php echo $arr[1] ?>')">
+                                                <option value="">Select faculty</option>
+                                            <?php     
+                                            
+
+                                            $sql = 'Select distinct tid from timetable where subject="'.$arr[1].'"';
+                                            $result = $conn->query($sql);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<option value=".$row['tid'].">". $row['tid']."</option>";
+                                                   
+                                                }
+                                            } else {
+                                                echo " ";
+                                            }
+                                            ?>
+                                            
                                                </select>
                                             </div>
       
         
                                             <div class="form-group">
-                                                <label> Time: (time set by the faculty)</label>
+                                                <div id="getTime2">-</div>
                                                 
                                             </div>
-                                            <div class="form-group">
-                                                <label>Room No: (Room no set by the faculty) </label>
-                                                
-                                            </div>
-                                        
-
+                                            
                                           <div class="modal-footer" style=" bottom: 0;">
-                                           
-                                            <input type="submit" name="submit" class="btn btn-primary" value="Save changes">
+                                           <input type="text" value="<?php echo $arr[1]; ?>" name="subject" hidden>
+                                                   <?php
+												   $f1=1;
+										   $query="select * from student_timetable where sap='$sap' and subject='$arr[1]'";
+                                           $query_r = mysqli_query($connection,$query);
+										  if(mysqli_fetch_array($query_r))
+                                 {
+                                      $f1=0;
+	 
+                                     }
+                                           /*      while($row=mysqli_fetch_assoc($r))
+												 {
+													 $f1=1;
+												 }*/
+											if($f1==1)
+                                           echo ' <input type="submit" name="save" class="btn btn-primary" value="Save changes">
+											';
+											
+											?>
 											</form>
-                                          </div>
+                                              </div>
                                         </div><!-- /.modal-content -->
                                       </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->  
                                       </div>
-                                      </div
+                                      </div>
 									              
 									                                        <!-- #modal 2 -->
-                                    <div class="modal fade" id="select_room3">
+                                    <div class="modal fade" id="<?php echo $arr[2]; ?>">
                                     <div class="modal-dialog" style="max-width:30%;height:45%; overflow-y: auto; ">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -964,45 +1365,72 @@ $conn->close();
                                           <div class="modal-body">
                                           <div class="modal-body">
                                               
-                                                <form method="post" action="" >
+                                          <form method="post" action="stu_tt_code.php" >
                                             <div class="form-group">
 											Selected subject: <br>
 											<input type="text" value="monday" name="day" hidden>
-											SUBJECT 3
+											<?php echo $arr[2]; ?>
 											<br>
 											<br> 
                                             <label>  Select Faculty: </label>
-                                                <select name="fac">
-                                                <option value="fac1">Faculty1</option>
-                                                <option value="fac2">Faculty2</option>
-                                                <option value="fac3">Faculty3</option>
-                                                <option value="fac4">Faculty4</option>
+                                                <select name="fac" onchange="showTime3(this.value,'<?php echo $arr[2]; ?>')">
+                                                <option value="">Select faculty</option>
+                                            <?php     
+                                            
+
+                                            $sql = 'Select distinct tid from timetable where subject="'.$arr[2].'"';
+                                            $result = $conn->query($sql);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<option value=".$row['tid'].">". $row['tid']."</option>";
+                                                   
+                                                }
+                                            } else {
+                                                echo " ";
+                                            }
+                                            ?>
+                                            
                                                </select>
                                             </div>
       
         
                                             <div class="form-group">
-                                                <label> Time: (time set by the faculty)</label>
+                                                <div id="getTime3">-</div>
                                                 
                                             </div>
-                                            <div class="form-group">
-                                                <label>Room No: (Room no set by the faculty) </label>
-                                                
-                                            </div>
-                                        
-
+                                            
                                           <div class="modal-footer" style=" bottom: 0;">
                                            
-                                            <input type="submit" name="submit" class="btn btn-primary" value="Save changes">
+                                             <input type="text" value="<?php echo $arr[2]; ?>" name="subject" hidden>
+                                                   <?php
+												   $f1=1;
+										   $query="select * from student_timetable where sap='$sap' and subject='$arr[2]'";
+                                           $query_r = mysqli_query($connection,$query);
+										  if(mysqli_fetch_array($query_r))
+                                 {
+                                      $f1=0;
+	 
+                                     }
+                                           /*      while($row=mysqli_fetch_assoc($r))
+												 {
+													 $f1=1;
+												 }*/
+											if($f1==1)
+                                           echo ' <input type="submit" name="save" class="btn btn-primary" value="Save changes">
+											';
+											
+											?>
 											</form>
                                           </div>
                                         </div><!-- /.modal-content -->
                                       </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->  
                                       </div>
-                                      </div
+                                      </div>
 									              								                                        <!-- #modal 2 -->
-                                    <div class="modal fade" id="select_room4">
+                                    <div class="modal fade" id="<?php echo $arr[3]; ?>">
                                     <div class="modal-dialog" style="max-width:30%;height:45%; overflow-y: auto; ">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -1013,36 +1441,62 @@ $conn->close();
                                           <div class="modal-body">
                                           <div class="modal-body">
                                               
-                                                <form method="post" action="" >
+                                          <form method="post" action="stu_tt_code.php" >
                                             <div class="form-group">
 											Selected subject: <br>
 											<input type="text" value="monday" name="day" hidden>
-											SUBJECT 4
+											<?php echo $arr[3]; ?>
 											<br>
 											<br> 
                                             <label>  Select Faculty: </label>
-                                                <select name="fac">
-                                                <option value="fac1">Faculty1</option>
-                                                <option value="fac2">Faculty2</option>
-                                                <option value="fac3">Faculty3</option>
-                                                <option value="fac4">Faculty4</option>
+                                                <select name="fac" onchange="showTime4(this.value,'<?php echo $arr[3]; ?>')">
+                                                <option value="">Select faculty</option>
+                                            <?php     
+                                            
+                                            $sql = 'Select distinct tid from timetable where subject="'.$arr[3].'"';
+                                            $result = $conn->query($sql);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<option value=".$row['tid'].">". $row['tid']."</option>";
+                                                   
+                                                }
+                                            } else {
+                                                echo " ";
+                                            }
+                                            ?>
+                                            
                                                </select>
                                             </div>
       
         
                                             <div class="form-group">
-                                                <label> Time: (time set by the faculty)</label>
+                                                <div id="getTime4">-</div>
                                                 
                                             </div>
-                                            <div class="form-group">
-                                                <label>Room No: (Room no set by the faculty) </label>
-                                                
-                                            </div>
-                                        
-
+                                            
                                           <div class="modal-footer" style=" bottom: 0;">
                                            
-                                            <input type="submit" name="submit" class="btn btn-primary" value="Save changes">
+                                               <input type="text" value="<?php echo $arr[3]; ?>" name="subject" hidden>
+                                                   <?php
+												   $f1=1;
+										   $query="select * from student_timetable where sap='$sap' and subject='$arr[3]'";
+                                           $query_r = mysqli_query($connection,$query);
+										  if(mysqli_fetch_array($query_r))
+                                 {
+                                      $f1=0;
+	 
+                                     }
+                                           /*      while($row=mysqli_fetch_assoc($r))
+												 {
+													 $f1=1;
+												 }*/
+											if($f1==1)
+                                           echo ' <input type="submit" name="save" class="btn btn-primary" value="Save changes">
+											';
+											
+											?>
 											</form>
                                           </div>
                                         </div><!-- /.modal-content -->
@@ -1053,7 +1507,7 @@ $conn->close();
 									              
 									  
 									                                        <!-- #modal 2 -->
-                                    <div class="modal fade" id="select_room5">
+                                    <div class="modal fade" id="<?php echo $arr[4]; ?>">
                                     <div class="modal-dialog" style="max-width:30%;height:45%; overflow-y: auto; ">
                                         <div class="modal-content">
                                           <div class="modal-header">
@@ -1064,36 +1518,63 @@ $conn->close();
                                           <div class="modal-body">
                                           <div class="modal-body">
                                               
-                                                <form method="post" action="" >
+                                          <form method="post" action="stu_tt_code.php" >
                                             <div class="form-group">
 											Selected subject: <br>
 											<input type="text" value="monday" name="day" hidden>
-											SUBJECT 5
+											<?php echo $arr[4]; ?>
 											<br>
 											<br> 
                                             <label>  Select Faculty: </label>
-                                                <select name="fac">
-                                                <option value="fac1">Faculty1</option>
-                                                <option value="fac2">Faculty2</option>
-                                                <option value="fac3">Faculty3</option>
-                                                <option value="fac4">Faculty4</option>
+                                                <select name="fac" onchange="showTime5(this.value,'<?php echo $arr[4]; ?>')">
+                                                <option value="">Select faculty</option>
+                                            <?php     
+                                            
+
+                                            $sql = 'Select distinct tid from timetable where subject="'.$arr[4].'"';
+                                            $result = $conn->query($sql);
+                                            
+                                            if ($result->num_rows > 0) {
+                                                // output data of each row
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<option value=".$row['tid'].">". $row['tid']."</option>";
+                                                   
+                                                }
+                                            } else {
+                                                echo " ";
+                                            }
+                                            ?>
+                                            
                                                </select>
                                             </div>
       
         
                                             <div class="form-group">
-                                                <label> Time: (time set by the faculty)</label>
+                                                <div id="getTime5">-</div>
                                                 
                                             </div>
-                                            <div class="form-group">
-                                                <label>Room No: (Room no set by the faculty) </label>
-                                                
-                                            </div>
-                                        
-
+                                            
                                           <div class="modal-footer" style=" bottom: 0;">
                                            
-                                            <input type="submit" name="submit" class="btn btn-primary" value="Save changes">
+                                               <input type="text" value="<?php echo $arr[4]; ?>" name="subject" hidden>
+                                                   <?php
+												   $f1=1;
+										   $query="select * from student_timetable where sap='$sap' and subject='$arr[4]'";
+                                           $query_r = mysqli_query($connection,$query);
+										  if(mysqli_fetch_array($query_r))
+                                 {
+                                      $f1=0;
+	 
+                                     }
+                                           /*      while($row=mysqli_fetch_assoc($r))
+												 {
+													 $f1=1;
+												 }*/
+											if($f1==1)
+                                           echo ' <input type="submit" name="save" class="btn btn-primary" value="Save changes">
+											';
+											
+											?>
 											</form>
                                           </div>
                                         </div><!-- /.modal-content -->
@@ -1106,11 +1587,9 @@ $conn->close();
                                 </tbody>
                             </table>
                         </div>
+						
 						<?php echo $_SESSION['tt']; ?> 
-						<form method="POST" action="update.php">
-                        <input type="submit" name="reload" value="Update time table" class="btn btn-primary" style="margin-left:500px; margin-top:30px; background-color:rgb(0, 65, 130); border-radius:12px;">
-
-                       </form>
+						
                     </div>
                 </div>
             
@@ -1119,61 +1598,7 @@ $conn->close();
     </div>
     
 
-    <script>
-        // 10 minutes from now
-     var time_in_minutes = 1;
-     var current_time = Date.parse(new Date());
-     var deadline = new Date(current_time + time_in_minutes*60*1000);
-     function time_remaining(endtime){
-         var t = Date.parse(endtime) - Date.parse(new Date());
-         var seconds = Math.floor( (t/1000) % 60 );
-         var minutes = Math.floor( (t/1000/60) % 60 );
-         var hours = Math.floor( (t/(1000*60*60)) % 24 );
-         var days = Math.floor( t/(1000*60*60*24) );
-         return {'total':t, 'days':days, 'hours':hours, 'minutes':minutes, 'seconds':seconds};
-     }
-     function run_clock(id,endtime){
-         var clock = document.getElementById(id);
-         function update_clock()
-         {
-             var t = time_remaining(endtime);
-             clock.innerHTML =t.minutes+'m '+t.seconds+'s';
-             if(t.total<=0)
-             {
-                  clearInterval(timeinterval); 
-             }
-             alertCountdown(t.minutes, t.seconds);
-     
-         }
-         update_clock(); // run function once at first to avoid delay
-         var timeinterval = setInterval(update_clock,1000);
-        
-     }
-     run_clock('clockdiv',deadline);
-     
-     function alertCountdown(timerMinutes, timerSeconds)
-     {
-         if(timerMinutes===0 && timerSeconds===0)
-         {
-             alert('Timer Expired');
-			 window.location.replace("logout.php");
-             document.getElementById("okay").disabled=true;
-         }
-     }
-     
-     
-     </script>
-     <script>
-       var lnk = document.getElementById('timeTable');
-     
-         if (window.addEventListener) {
-             document.addEventListener('click', function (e) {
-                 if (e.target.id === lnk.id) {
-                     //e.preventDefault();         // Comment this line to enable the link tag again.
-                 }
-             });
-         }
-     </script>
+   
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <!-- Popper.JS -->

@@ -2,9 +2,10 @@
 include('security2.php');
 $_SESSION['f']=1;
 $_SESSION['tt']="";
-
+//$_SESSION['temp']=0;
 $tid=$_SESSION['username'];
 	$username=$_SESSION['username'];
+	$status=0;
                 $connection= mysqli_connect('localhost','root','');
                 $db=mysqli_select_db($connection,'minor');
                 if(!$connection)
@@ -13,23 +14,32 @@ $tid=$_SESSION['username'];
                 }
                 $query="select * from faculty where username='$username'";
                 $query_run = mysqli_query($connection,$query);
-    
+                $s1="0";
+				$s2="0";
                 while($row = mysqli_fetch_assoc($query_run))
                 {
 					$name=$row["Name"];
 					$phone=$row["Contact"];
 					$email=$row["Email"];
+					$s1=$row["Subject1"];
+					$s2=$row["Subject2"];
+					$c1=$row["c1"];
+					$c2=$row["c2"];
+					$status=$row["status"];
           $designation=$row["Designation"];
           $img=$row["Img"];
           $imageURL = 'admin/uploads/'.$img; 
                     
                 }
+				
+				//echo $s1." /".$s2;
 
 	
                 $connection= mysqli_connect('localhost','root','');
-                $db=mysqli_select_db($connection,'faculty');
+                $db=mysqli_select_db($connection,'minor');
                
-              
+             
+			  
 
 if(isset($_POST['submit']))
 {
@@ -37,6 +47,7 @@ if(isset($_POST['submit']))
     $time=$_POST['time'];
     $room=$_POST['room'];
 	$subject=$_POST['subject'];
+	
 	
 	$flag=0;
 	
@@ -55,9 +66,11 @@ if(isset($_POST['submit']))
     
     else if(mysqli_fetch_array($query_r))
     {
+		
 $update="update timetable set subject='$subject', room='$room' where tid='$tid' and day='$day' and time='$time' and flag=0";
 if(mysqli_query($connection,$update))
 $_SESSION['tt']="Timetabe updated";
+
 else
 $_SESSION['tt']="Database error";
 
@@ -65,13 +78,55 @@ $_SESSION['tt']="Database error";
     
     else
     {
+		$css=0;
+		  if($subject==$s1)
+		  {
+			  if($c1==0)
+			  {
+				$_SESSION['tt']="Your all slots have been filled.";  
+				$css=1;
+			  }
+		  }
+		   if($subject==$s2)
+		   {
+			    if($c2==0)
+				{
+				$_SESSION['tt']="Your all slots have been filled.";  
+				$css=1;
+				}
+		   }
 		$insert="insert into timetable (day,time,subject,room,tid,flag) values ('$day','$time','$subject','$room','$tid',$flag)";
+		if($css==0)
+		{
        if(mysqli_query($connection,$insert))
+	   {
+		   $_SESSION['temp']=1;
 		   $_SESSION['tt']="Timetabe updated";
+		   $connection= mysqli_connect('localhost','root','');
+                $db=mysqli_select_db($connection,'minor');
+				//echo $subject;
+		   if($subject==$s1)
+		   {
+			   
+			   $c1=$c1-1;
+			    $query="update faculty set c1='$c1' where username='$username'";
+                $query_run = mysqli_query($connection,$query);
+				
+		   }
+		   if($subject==$s2)
+		   {
+			   $c2=$c2-1;
+			   $query="update faculty set c2='$c2' where username='$username'";
+                $query_run = mysqli_query($connection,$query);
+				
+		   }
+	   }
 	   else
 		  $_SESSION['tt']="Database error";
+		}
 	  
     }
+	
     
   
 
@@ -93,7 +148,7 @@ $_SESSION['tt']="Database error";
     <!-- Our Custom CSS -->
   
     <link rel="stylesheet" href="css/faculty_style.css">
-    <link rel="stylesheet" href="css/tt_style.css">
+    <link rel="stylesheet" href="css/timetable_style.css">
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
@@ -195,7 +250,7 @@ $_SESSION['tt']="Database error";
                                         <td class="column100 column2" data-column="column2">
                                       
         <?php 
-        			   $conn= new mysqli('localhost','root','','faculty');
+        			   $conn= new mysqli('localhost','root','','minor');
                        if ($conn->connect_error) {
 die("Connection failed: " . $conn->connect_error);
 }
@@ -288,7 +343,10 @@ if ($result->num_rows > 0) {
         
                                     <tr class="row100">
                                         <td class="column100 column1" data-column="column1">10:30 - 11:30
-                             <?php     
+
+                                        </td>
+                                        <td class="column100 column2" data-column="column2">
+										                             <?php     
 							 
 $sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="monday" ';
 $result = $conn->query($sql);
@@ -302,9 +360,10 @@ if ($result->num_rows > 0) {
     echo " ";
 }
  ?>
+
                                         </td>
-                                        <td class="column100 column2" data-column="column2">
-                                            <?php     
+                                        <td class="column100 column3" data-column="column3">
+										                                            <?php     
 											
 											
 
@@ -320,9 +379,10 @@ if ($result->num_rows > 0) {
     echo " ";
 }
  ?>
+                                         
                                         </td>
-                                        <td class="column100 column3" data-column="column3">
-                                            <?php    
+                                        <td class="column100 column4" data-column="column4">
+										   <?php    
 
 $sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="wednesday" ';
 $result = $conn->query($sql);
@@ -337,7 +397,8 @@ if ($result->num_rows > 0) {
 }
  ?>
                                         </td>
-                                        <td class="column100 column4" data-column="column4">
+                                        <td class="column100 column5" data-column="column5">
+										
                                        <?php     
 								
 
@@ -353,9 +414,10 @@ if ($result->num_rows > 0) {
     echo " ";
 }
  ?>
+										 
                                         </td>
-                                        <td class="column100 column5" data-column="column5">
-										  <?php     
+                                        <td class="column100 column6" data-column="column6">
+                                         <?php     
 							
 $sql = 'Select room,subject from timetable where tid="'.$tid.'" and time="10:30" and day="friday" ';
 $result = $conn->query($sql);
@@ -369,9 +431,6 @@ if ($result->num_rows > 0) {
     echo " ";
 }
  ?>
-                                        </td>
-                                        <td class="column100 column6" data-column="column6">
-                                        
                                         </td>
                                         
                                     </tr>
@@ -939,9 +998,16 @@ $conn->close();
                                             <div class="form-group">
                                                 <label>  Select Subject: </label>
                                                 <select name="subject">
-                                                    <option value="Sub1">Subject 1</option>
-                                                    <option value="Sub2">Subject 2</option>
-                                                    <option value="Sub3">Subject 3</option>
+												
+												<?php
+												 echo "
+                                                    <option value=$s1>$s1</option>";
+													if($s2!="")
+													{
+														echo "
+                                                    <option value=$s2>$s2</option>";
+													}
+                                                    ?>
                                                     <br>
                                                 </select>
                                                                                 </div>
@@ -960,7 +1026,7 @@ $conn->close();
                                       </div><!-- /.modal-dialog -->
                                     </div><!-- /.modal -->  
                                       </div>
-                                      </div
+                                      </div>
 									                                        <!-- #modal 2 -->
                                     <div class="modal fade" id="select_room2">
                                       <div class="modal-dialog" style="max-width:30%;height:45%; overflow-y: auto; ">
@@ -996,9 +1062,15 @@ $conn->close();
                                             <div class="form-group">
                                                 <label>  Select Subject: </label>
                                                 <select name="subject">
-                                                    <option value="Sub1">Subject 1</option>
-                                                    <option value="Sub2">Subject 2</option>
-                                                    <option value="Sub3">Subject 3</option>
+                                                		<?php
+												 echo "
+                                                    <option value=$s1>$s1</option>";
+													if($s2!="")
+													{
+														echo "
+                                                    <option value=$s2>$s2</option>";
+													}
+                                                    ?>
                                                     <br>
                                                 </select>
                                                                                 </div>
@@ -1054,9 +1126,15 @@ $conn->close();
                                             <div class="form-group">
                                                 <label>  Select Subject: </label>
                                                 <select name="subject">
-                                                    <option value="Sub1">Subject 1</option>
-                                                    <option value="Sub2">Subject 2</option>
-                                                    <option value="Sub3">Subject 3</option>
+                                       		<?php
+												 echo "
+                                                    <option value=$s1>$s1</option>";
+													if($s2!="")
+													{
+														echo "
+                                                    <option value=$s2>$s2</option>";
+													}
+                                                    ?>
                                                     <br>
                                                 </select>
                                                                                 </div>
@@ -1076,7 +1154,10 @@ $conn->close();
                                     </div><!-- /.modal -->  
                                       </div>
                                       </div>
-									                                        <!-- #modal 2 -->
+									                      <?php echo $s1.": ".$c1."   <br>   ";
+														  if($s2!="")
+														  {
+														  echo $s2.": ".$c2."      ";	}  ?>                  <!-- #modal 2 -->
                                     <div class="modal fade" id="select_room4">
                                       <div class="modal-dialog" style="max-width:30%;height:45%; overflow-y: auto; ">
                                         <div class="modal-content">
@@ -1112,9 +1193,15 @@ $conn->close();
                                             <div class="form-group">
                                                 <label>  Select Subject: </label>
                                                 <select name="subject">
-                                                    <option value="Sub1">Subject 1</option>
-                                                    <option value="Sub2">Subject 2</option>
-                                                    <option value="Sub3">Subject 3</option>
+                                                    		<?php
+												 echo "
+                                                    <option value=$s1>$s1</option>";
+													if($s2!="")
+													{
+														echo "
+                                                    <option value=$s2>$s2</option>";
+													}
+                                                    ?>
                                                     <br>
                                                 </select>
                                                                                 </div>
@@ -1156,7 +1243,7 @@ $conn->close();
 											<br>
                                             <label>  Select Time: </label>
                                                 <select name="time">
-                                                                                         <option value="9:30">9:30-10:30</option>
+                                                <option value="9:30">9:30-10:30</option>
                                                 <option value="10:30">10:30-11:30</option>
                                                 <option value="11:30">11:30-12:30</option>
                                                 <option value="12:30">12:30-1:30</option>
@@ -1171,9 +1258,15 @@ $conn->close();
                                             <div class="form-group">
                                                 <label>  Select Subject: </label>
                                                 <select name="subject">
-                                                    <option value="Sub1">Subject 1</option>
-                                                    <option value="Sub2">Subject 2</option>
-                                                    <option value="Sub3">Subject 3</option>
+                                                   		<?php
+												 echo "
+                                                    <option value=$s1>$s1</option>";
+													if($s2!="")
+													{
+														echo "
+                                                    <option value=$s2>$s2</option>";
+													}
+                                                    ?>
                                                     <br>
                                                 </select>
                                                                                 </div>
@@ -1198,11 +1291,26 @@ $conn->close();
                                 </tbody>
                             </table>
                         </div>
-						<?php echo $_SESSION['tt']; ?>
-						<form method="POST" action="update.php">
-                        <input type="submit" name="reload" value="Update time table" class="btn btn-primary" style="margin-left:500px; margin-top:30px; background-color:rgb(0, 65, 130); border-radius:12px;">
+						<?php 
+						
+							echo $_SESSION['tt']; 
+							if($status==0)
+                        echo '
+                        <form method="POST" action="update.php">
+                        <input type="submit" name="reload" value="Finalise time table" class="btn btn-primary" style="float:right; margin-right:-150px;margin-top:10px; background-color:rgb(0, 65, 130); border-radius:12px;">
 
                        </form>
+                        <form method="POST" action="reset.php">
+                        <input type="submit" name="reload" value="Reset" class="btn btn-primary" style="float:right;margin-right:10px; margin-top:10px; background-color:rgb(0, 65, 130); border-radius:12px;">
+
+                       </form>
+                        
+					  
+					   
+					   
+					   
+					   ';
+					   ?>
                     </div>
                 </div>
             
